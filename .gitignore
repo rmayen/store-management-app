@@ -1,0 +1,21 @@
+# Compiled output
+*.o
+*.exe
+*.out
+StoreApp
+
+# Data files
+userdata.txt
+log.txt
+error_log.txt
+
+# IDE files
+.idea/
+.vscode/
+*.sln
+*.vcxproj*
+.vs/
+
+# OS files
+.DS_Store
+Thumbs.db
