@@ -36,12 +36,27 @@ Developed as a personal project to practice object-oriented design patterns in C
 - OpenSSL development libraries
 
 ### Compile and Run
-```bash
-# Using g++
-g++ -o StoreApp StoreApp.cpp -lssl -lcrypto -std=c++11
 
-# Run the application
+With the included Makefile (Linux / macOS):
+
+```bash
+make           # builds ./StoreApp
+make run       # builds and launches it
+make clean     # removes the binary and generated data files
+```
+
+Or directly with g++:
+
+```bash
+g++ -o StoreApp StoreApp.cpp -lssl -lcrypto -std=c++11
 ./StoreApp
+```
+
+On macOS with Homebrew OpenSSL:
+
+```bash
+g++ -std=c++11 -I$(brew --prefix openssl)/include -L$(brew --prefix openssl)/lib \
+    -o StoreApp StoreApp.cpp -lssl -lcrypto
 ```
 
 ### Menu Options
