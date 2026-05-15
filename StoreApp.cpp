@@ -33,6 +33,13 @@ struct User {
     vector<Item> purchaseHistory;
 };
 
+// Forward declarations
+void viewCart(const vector<Item>& cart);
+double calculateTotalPrice(const vector<Item>& cart);
+PaymentMethod selectPaymentMethod();
+void processPayment(PaymentMethod method);
+void registerUser(map<string, User>& users);
+
 std::string generateSalt(size_t length = 16) {
     const std::string chars =
         "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -233,14 +240,6 @@ void loadUserData(map<string, User>& users) {
         cerr << "Unable to load user data." << endl;
     }
 }
-bool validateCredentials(const string& username, const string& password, const map<string, User>& users) {
-    auto it = users.find(username);
-    if (it != users.end()) {
-        string hashedInputPassword = sha256(it->second.salt + password);
-        return it->second.passwordHash == hashedInputPassword;
-    }
-    return false;
-}
 void logError(const string& error) {
     ofstream logFile("error_log.txt", ios::app);
     if (logFile.is_open()) {
@@ -336,26 +335,6 @@ void viewCart(const vector<Item>& cart) {
             << ", Quantity: " << item.quantity << ", Category: " << item.category << endl;
     }
 }
-void registerUser(map<string, User>& users) {
-    User newUser;
-    cout << "Enter a username: ";
-    cin.ignore();
-    getline(cin, newUser.username);
-
-    if (users.find(newUser.username) != users.end()) {
-        cout << "Username already exists. Please choose a different username.\n";
-        return;
-    }
-
-    string password;
-    cout << "Enter a password: ";
-    getline(cin, password);
-
-    newUser.passwordHash = sha256(password); // Utilize the sha256 function for hashing
-    users[newUser.username] = newUser;
-
-    cout << "Registration successful.\n";
-}
 void mainMenu() {
     vector<Item> inventory;
     vector<Item> cart;
@@ -412,38 +391,6 @@ void registerUser(map<string, User>& users) {
     users[username] = newUser;
 
     cout << "Registration successful. You can now log in.\n";
-}
-void updateItemPrice(vector<Item>& inventory) {
-    if (inventory.empty()) {
-        cout << "The inventory is currently empty.\n";
-        return;
-    }
-
-    cout << "Select an item to update its price:\n";
-    for (size_t i = 0; i < inventory.size(); ++i) {
-        cout << i + 1 << ": " << inventory[i].name << " (Current Price: $" << inventory[i].price << ")\n";
-    }
-
-    int choice;
-    cout << "Enter the number of the item: ";
-    cin >> choice;
-
-    if (choice < 1 || choice > static_cast<int>(inventory.size())) {
-        cout << "Invalid selection.\n";
-        return;
-    }
-
-    double newPrice;
-    cout << "Enter the new price for " << inventory[choice - 1].name << ": ";
-    cin >> newPrice;
-
-    if (newPrice < 0) {
-        cout << "Price cannot be negative.\n";
-        return;
-    }
-
-    inventory[choice - 1].price = newPrice;
-    cout << "Price updated successfully.\n";
 }
 void processPayment(PaymentMethod method) {
     switch (method) {
@@ -558,7 +505,7 @@ int main() {
         cout << "7. Log in as a user\n";
         cout << "8. Register an account\n";
         cout << "9. Log in as the owner\n"; // Added owner login option
-        cout << "10. Quit\n"; // Changed the option number
+        cout << "0. Quit\n";
         cout << "Enter your choice: ";
 
         try {
@@ -677,7 +624,7 @@ int main() {
                 }
                 break;
             }
-            case '10': {
+            case '0': {
                 saveUserData(users);
                 cout << "Exiting the program.\n";
                 break;
@@ -690,7 +637,7 @@ int main() {
             cerr << "Error: " << e.what() << endl;
         }
 
-    } while (choice != '10');
+    } while (choice != '0');
 
     return 0;
 }
