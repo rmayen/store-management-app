@@ -487,9 +487,9 @@ int main() {
     // Load user data from a file
     loadUserData(users);
 
-    // Define the owner's credentials (for demonstration purposes)
+    // Demo owner credentials. Replace with a per-deployment secret in production.
     const string ownerUsername = "owner";
-    const string ownerPassword = ""; // Change this to a secure password
+    const string ownerPassword = sha256("admin");
 
     char choice;
 

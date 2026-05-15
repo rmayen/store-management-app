@@ -70,8 +70,17 @@ g++ -std=c++11 -I$(brew --prefix openssl)/include -L$(brew --prefix openssl)/lib
 7. Log in as a user
 8. Register an account
 9. Log in as the owner
-10. Quit
+0. Quit
 ```
+
+## Demo Credentials
+
+The owner account is hardcoded for demo purposes:
+
+- **Username:** `owner`
+- **Password:** `admin`
+
+In a production deployment this would be stored hashed in a configuration file or environment variable, not hardcoded in the source.
 
 ## Example Usage
 
